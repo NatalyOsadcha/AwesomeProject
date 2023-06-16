@@ -1,41 +1,55 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  SafeAreaView,
-  Alert,
-  Dimensions,
-  Image,
-  ImageBackground,
-  Keyboard,
-  KeyboardAvoidingView,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 // import BgImg from '../assets/images/BG.png'
 
-export default function RegistrationScreen() {
+export const RegistrationScreen = () => {
   return (
     <View style={styles.container}>
-      <Image
+      <StatusBar style="auto" />
+      <ImageBackground
         source={require("../assets/images/BG.png")}
-        style={styles.img}
-      />
+        style={styles.imgBg}
+      >
+        <View style={styles.top}>
+          <Text style={styles.text}>Hello!</Text>
+        </View>
+         <View style={styles.form}>
+          <Text style={styles.text}>Реєстрація</Text>
+        </View>
+      </ImageBackground>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {},
-  img: {
-    // position: 'absolute',
-    flex: 1,
-    // height: Dimensions.get('window').height
+  container: {
+    // flex: 1,
+    // backgroundColor: "#fff",
+   
+  },
+  imgBg: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    // justifyContent: "center",
+    // flex: 1,
+    // justifyContent: "center",
+  },
+  text: {
+    fontSize: 20,
+  },
+  top: {
+    height: '35%',
+    width:'100%',
+  },
+  form: {
+    height: '65%',
+    width:'100%',
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    backgroundColor: '#fff',
+     alignItems: "center",
+    justifyContent: "center",
   }
 });
-
-
-
