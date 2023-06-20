@@ -19,7 +19,7 @@ export const RegistrationScreen = () => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  // const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   return (
     <TouchableWithoutFeedback>
@@ -32,7 +32,7 @@ export const RegistrationScreen = () => {
         <View style={styles.formContainer}>
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 200}
+            // keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 200}
           >
             <View style={{marginBottom: 50}}>
             <View style={styles.avatar}>
@@ -49,13 +49,13 @@ export const RegistrationScreen = () => {
               style={styles.input}
               placeholder="Login"
               onChange={(val) => setLogin(val)}
-              onFocus={() => setIsShowKeyboard(true)}
+              // onFocus={() => setIsShowKeyboard(true)}
             />
             <TextInput
               style={styles.input}
               placeholder="Email"
               onChange={(val) => setEmail(val)}
-              onFocus={() => setIsShowKeyboard(true)}
+              // onFocus={() => setIsShowKeyboard(true)}
             />
             <View style={styles.passwordWrap}>
               <TextInput
@@ -65,7 +65,7 @@ export const RegistrationScreen = () => {
                 style={styles.input}
                 placeholder="Password"
                 onChange={(val) => setPassword(val)}
-                onFocus={() => setIsShowKeyboard(true)}
+                // onFocus={() => setIsShowKeyboard(true)}
               />
               <Pressable>
                 <Text style={styles.showBtn}>Show</Text>
