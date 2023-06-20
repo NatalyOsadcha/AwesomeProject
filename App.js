@@ -12,6 +12,7 @@ export default function App() {
  const [fontsLoaded] = useFonts({
    'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
    'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+   'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -27,9 +28,9 @@ export default function App() {
   return (
     <View>
       <RegistrationScreen />
-      {/* <LoginScreen/>
-      <PostsScreen/>
-      <Text>Hello!</Text> */}
+      {/* <LoginScreen/> */}
+      {/* <PostsScreen/> */}
+      {/* <Text>Hello!</Text>  */}
       <StatusBar style="auto" />
     </View>
   );

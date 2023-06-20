@@ -12,8 +12,8 @@ import {
   Pressable,
   Dimensions,
   Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
-// import BgImg from '../assets/images/BG.png'
 
 export const RegistrationScreen = () => {
   const [login, setLogin] = useState("");
@@ -22,34 +22,40 @@ export const RegistrationScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   return (
-     
- <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          // style={{ flex: 1, justifyContent: "center" }}
-          >
-      <StatusBar style="auto" />
+    <TouchableWithoutFeedback>
       <ImageBackground
         source={require("../assets/images/BG.png")}
         style={styles.imgBg}
       >
-  
+        <StatusBar style="auto" />
+        <View style={styles.cleanBg}></View>
         <View style={styles.formContainer}>
-          <View style={styles.avatar}>
-            <AntDesign name="pluscircleo" size={25} style={styles.addIcon} />
-          </View>
-        
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 200}
+          >
+            <View style={{marginBottom: 50}}>
+            <View style={styles.avatar}>
+              <View style={styles.addWrapper}>
+                <AntDesign
+                  name="pluscircleo"
+                  size={25}
+                  style={styles.addIcon}
+                />
+              </View>
+            </View>
             <Text style={styles.title}>Registration</Text>
             <TextInput
               style={styles.input}
               placeholder="Login"
               onChange={(val) => setLogin(val)}
-              onFocus={()=>setIsShowKeyboard(true)}
+              onFocus={() => setIsShowKeyboard(true)}
             />
             <TextInput
               style={styles.input}
               placeholder="Email"
               onChange={(val) => setEmail(val)}
-              onFocus={()=>setIsShowKeyboard(true)}
+              onFocus={() => setIsShowKeyboard(true)}
             />
             <View style={styles.passwordWrap}>
               <TextInput
@@ -59,27 +65,28 @@ export const RegistrationScreen = () => {
                 style={styles.input}
                 placeholder="Password"
                 onChange={(val) => setPassword(val)}
-                
+                onFocus={() => setIsShowKeyboard(true)}
               />
               <Pressable>
                 <Text style={styles.showBtn}>Show</Text>
               </Pressable>
             </View>
-         
-          <View style={styles.logIn}>
-            <Pressable style={styles.buttonWrap}>
-              <Text style={styles.button}>Sign up</Text>
-            </Pressable>
-            <View style={styles.textWrap}>
-              <Text style={styles.text}>Already have an account? Sign in</Text>
-            </View>
-            </View>
-            
-          </View>
-         
+            <View style={styles.logIn}>
+              <Pressable style={styles.buttonWrap}>
+                <Text style={styles.button}>Sign up</Text>
+              </Pressable>
+              <View style={styles.textWrap}>
+                <Text style={styles.text}>Already have an account?</Text>
+                <Pressable>
+                  <Text style={styles.link}>Sign in</Text>
+                </Pressable>
+              </View>
+              </View>
+              </View>
+          </KeyboardAvoidingView>
+        </View>
       </ImageBackground>
-</KeyboardAvoidingView>
-       
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -89,11 +96,13 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  cleanBg: {
+    height: "30%",
+  },
   formContainer: {
-    position: "absolute",
     width: "100%",
-    height: "65%",
-    bottom: 0,
+    height: "70%",
+    position: "relative",
     paddingTop: 92,
     paddingBottom: 30,
     borderTopLeftRadius: 25,
@@ -109,26 +118,23 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     lineHeight: 35,
   },
-  form: {
-    paddingTop: 32,
-    marginBottom: 30,
+  addWrapper: {
+    position: "absolute",
+    right: -12,
+    bottom: 18,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 50,
   },
   avatar: {
     position: "absolute",
-    margin: "auto",
-    top: -60,
-    left: Dimensions.get("window").width / 2 - 60,
+    top: -152,
+    left: Dimensions.get("window").width / 2 - 76,
     width: 120,
     height: 120,
     borderRadius: 16,
     backgroundColor: "#F6F6F6",
   },
   addIcon: {
-    position: "absolute",
-    right: -13,
-    bottom: 16,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 50,
     color: "#FF6C00",
   },
   input: {
@@ -146,6 +152,7 @@ const styles = StyleSheet.create({
   },
   passwordWrap: {
     position: "relative",
+    marginBottom: 43,
   },
   showBtn: {
     position: "absolute",
@@ -157,6 +164,10 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     color: "#1B4371",
   },
+  // logIn: {
+  //   marginTop: 43,
+
+  // },
   buttonWrap: {
     width: "auto",
     alignItems: "center",
@@ -172,9 +183,18 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
   textWrap: {
-    alignItems: "center",
+    justifyContent: "center",
+    display: "flex",
+    flexDirection: "row",
   },
   text: {
+    fontSize: 16,
+    lineHeight: 19,
+    fontFamily: "Roboto-Regular",
+    marginRight: 5,
+  },
+  link: {
+    textDecorationLine: "underline",
     fontSize: 16,
     lineHeight: 19,
     fontFamily: "Roboto-Regular",
