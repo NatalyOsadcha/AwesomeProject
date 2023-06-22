@@ -8,6 +8,7 @@ import {
   Text,
   View,
   TextInput,
+  Keyboard,
   KeyboardAvoidingView,
   Pressable,
   Dimensions,
@@ -22,7 +23,9 @@ export const RegistrationScreen = () => {
   // const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss();
+    console.log('qwertyqweerty')}}>
       <ImageBackground
         source={require("../assets/images/BG.png")}
         style={styles.imgBg}
@@ -31,58 +34,58 @@ export const RegistrationScreen = () => {
         <View style={styles.cleanBg}></View>
         <View style={styles.formContainer}>
           <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            behavior={Platform.OS === "ios" ?  "padding" : undefined}
             // keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 200}
           >
-            <View style={{marginBottom: 50}}>
-            <View style={styles.avatar}>
-              <View style={styles.addWrapper}>
-                <AntDesign
-                  name="pluscircleo"
-                  size={25}
-                  style={styles.addIcon}
-                />
+            <View style={{ marginBottom: 50 }}>
+              <View style={styles.avatar}>
+                <View style={styles.addWrapper}>
+                  <AntDesign
+                    name="pluscircleo"
+                    size={25}
+                    style={styles.addIcon}
+                  />
+                </View>
               </View>
-            </View>
-            <Text style={styles.title}>Registration</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Login"
-              onChange={(val) => setLogin(val)}
-              // onFocus={() => setIsShowKeyboard(true)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              onChange={(val) => setEmail(val)}
-              // onFocus={() => setIsShowKeyboard(true)}
-            />
-            <View style={styles.passwordWrap}>
+              <Text style={styles.title}>Registration</Text>
               <TextInput
-                name="password"
-                // value={password}
-                secureTextEntry
                 style={styles.input}
-                placeholder="Password"
-                onChange={(val) => setPassword(val)}
+                placeholder="Login"
+                onChange={(val) => setLogin(val)}
                 // onFocus={() => setIsShowKeyboard(true)}
               />
-              <Pressable>
-                <Text style={styles.showBtn}>Show</Text>
-              </Pressable>
-            </View>
-            <View style={styles.logIn}>
-              <Pressable style={styles.buttonWrap}>
-                <Text style={styles.button}>Sign up</Text>
-              </Pressable>
-              <View style={styles.textWrap}>
-                <Text style={styles.text}>Already have an account?</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                onChange={(val) => setEmail(val)}
+                // onFocus={() => setIsShowKeyboard(true)}
+              />
+              <View style={styles.passwordWrap}>
+                <TextInput
+                  name="password"
+                  // value={password}
+                  secureTextEntry
+                  style={styles.input}
+                  placeholder="Password"
+                  onChange={(val) => setPassword(val)}
+                  // onFocus={() => setIsShowKeyboard(true)}
+                />
                 <Pressable>
-                  <Text style={styles.link}>Sign in</Text>
+                  <Text style={styles.showBtn}>Show</Text>
                 </Pressable>
               </View>
+              <View style={styles.logIn}>
+                <Pressable style={styles.buttonWrap}>
+                  <Text style={styles.button}>Sign up</Text>
+                </Pressable>
+                <View style={styles.textWrap}>
+                  <Text style={styles.text}>Already have an account?</Text>
+                  <Pressable>
+                    <Text style={styles.link}>Sign in</Text>
+                  </Pressable>
+                </View>
               </View>
-              </View>
+            </View>
           </KeyboardAvoidingView>
         </View>
       </ImageBackground>

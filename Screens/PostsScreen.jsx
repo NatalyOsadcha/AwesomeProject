@@ -1,43 +1,63 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
-import { View, Text, StyleSheet, Image, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 
 export default function PostsScreen() {
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Publications</Text>
-      </View>
-      <View style={styles.body}>
-        <View style={styles.user}>
-          <View style={styles.avatarWrap}>
-            <Image></Image>
-          </View>
-          <View>
-            <Text style={styles.name}>Natali Romanova</Text>
-            <Text style={styles.email}>email@example.com</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Publications</Text>
+        </View>
+        <View style={styles.body}>
+          <View style={styles.user}>
+            <View style={styles.avatarWrap}>
+              <Image></Image>
+            </View>
+            <View>
+              <Text style={styles.name}>Natali Romanova</Text>
+              <Text style={styles.email}>email@example.com</Text>
+            </View>
           </View>
         </View>
+        <View style={styles.footer}>
+          <Pressable style={styles.storeWrap}>
+            <AntDesign
+              name="appstore-o"
+              size={24}
+              color="rgba(33, 33, 33, 0.8)"
+              style={styles.icon}
+            />
+          </Pressable>
+          <Pressable style={styles.addWrap}>
+            <AntDesign
+              name="plus"
+              size={24}
+              color="#FFFFFF"
+              style={styles.icon}
+            />
+          </Pressable>
+          <Pressable style={styles.userWrap}>
+            <SimpleLineIcons
+              name="user"
+              size={24}
+              color="rgba(33, 33, 33, 0.8)"
+              style={styles.icon}
+            />
+          </Pressable>
+        </View>
       </View>
-      <View style={styles.footer}>
-        <Pressable style={styles.storeWrap}>
-          <AntDesign name="appstore-o" size={24} color="rgba(33, 33, 33, 0.8)" style={styles.icon}/>
-        </Pressable>
-        <Pressable style={styles.addWrap}>
-          <AntDesign name="plus" size={24} color="#FFFFFF" style={styles.icon}/>
-        </Pressable>
-        <Pressable style={styles.userWrap}>
-          <SimpleLineIcons
-            name="user"
-            size={24}
-            color="rgba(33, 33, 33, 0.8)"
-            style={styles.icon}
-          />
-        </Pressable>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -94,9 +114,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: "absolute",
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems:'baseline',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "baseline",
     bottom: 0,
     width: "100%",
     height: 83,
@@ -112,9 +132,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   icon: {
-  paddingBottom: 8,
+    paddingBottom: 8,
     paddingTop: 8,
     paddingLeft: 23,
     paddingRight: 23,
-}
+  },
 });
