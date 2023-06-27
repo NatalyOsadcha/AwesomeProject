@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { RegistrationScreen } from "./Screens/RegistrationScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import PostsScreen from "./Screens/PostsScreen";
+import LoginSC from "./Screens/LoginSC";
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback } from "react";
@@ -27,7 +28,8 @@ export default function App() {
 
   return (
     <View>
-      <RegistrationScreen />
+      <LoginSC/>
+      {/* <RegistrationScreen /> */}
       {/* <LoginScreen/> */}
       {/* <PostsScreen/> */}
       {/* <Text>Hello!</Text>  */}

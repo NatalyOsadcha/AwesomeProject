@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import {
+  Platform,
   View,
   Text,
   TouchableWithoutFeedback,
-    Keyboard,
+  Keyboard,
   StyleSheet,
   ImageBackground,
   TextInput,
@@ -12,68 +13,71 @@ import {
 } from "react-native";
 
 export default function LoginScreen() {
+  console.log("jjjjj");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ImageBackground
-        source={require("../assets/images/BG.png")}
-        style={styles.imgBg}
-      >
-        <View style={styles.cleanBg}></View>
-        <View style={styles.logInContainer}>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../assets/images/BG.png")}
+          style={styles.imgBg}
+        >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
-            <Text style={styles.title}>Sign in</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              onChange={(val) => setEmail(val)}
-              onFocus={() => setIsShowKeyboard(true)}
-            />
-            <View style={styles.passwordWrap}>
+            <View style={styles.logInContainer}>
+              <Text style={styles.title}>Sign in</Text>
               <TextInput
-                name="password"
-                // value={password}
-                secureTextEntry
                 style={styles.input}
-                placeholder="Password"
-                onChange={(val) => setPassword(val)}
+                placeholder="Email"
+                value={email}
+                onChangeText={(val) => setEmail(val)}
+                onFocus={() => setIsShowKeyboard(true)}
               />
-              <Pressable>
-                <Text style={styles.showBtn}>Show</Text>
+              <View style={styles.passwordWrap}>
+                <TextInput
+                  name="password"
+                  value={password}
+                  secureTextEntry
+                  style={styles.input}
+                  placeholder="Password"
+                  onChangeText={(val) => setPassword(val)}
+                />
+                <Pressable>
+                  <Text style={styles.showBtn}>Show</Text>
+                </Pressable>
+              </View>
+              <Pressable style={styles.buttonWrap}>
+                <Text style={styles.button}>Sign in</Text>
               </Pressable>
+              <View style={styles.textWrap}>
+                <Text style={styles.text}>Don't have an account?</Text>
+                <Pressable>
+                  <Text style={styles.link}>Sign up</Text>
+                </Pressable>
+              </View>
             </View>
           </KeyboardAvoidingView>
-          <Pressable style={styles.buttonWrap}>
-            <Text style={styles.button}>Sign in</Text>
-          </Pressable>
-          <View style={styles.textWrap}>
-            <Text style={styles.text}>Don't have an account?</Text>
-            <Pressable>
-              <Text style={styles.link}>Sign up</Text>
-            </Pressable>
-          </View>
-        </View>
-      </ImageBackground>
+        </ImageBackground>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
   imgBg: {
+    flex: 1,
     width: "100%",
     height: "100%",
   },
-  cleanBg: {
-    height: "40%",
-  },
   logInContainer: {
-    height: "60%",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingLeft: 16,
