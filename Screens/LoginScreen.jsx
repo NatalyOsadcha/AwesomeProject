@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Platform,
   View,
   Text,
   TouchableWithoutFeedback,
@@ -10,23 +9,32 @@ import {
   TextInput,
   Pressable,
   KeyboardAvoidingView,
+	Platform,
 } from "react-native";
 
 export default function LoginScreen() {
-  console.log("jjjjj");
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+	const [password, setPassword] = useState("");
+	const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+	const toggleSecureTextEntry = () => {
+		setSecureTextEntry((prevState) => !prevState);
+	}
+
+  const onLogin = () => {
+    console.log("Credentials", `${email} + ${password}`);
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
+      <View>
         <ImageBackground
           source={require("../assets/images/BG.png")}
           style={styles.imgBg}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
           >
             <View style={styles.logInContainer}>
               <Text style={styles.title}>Sign in</Text>
@@ -34,23 +42,22 @@ export default function LoginScreen() {
                 style={styles.input}
                 placeholder="Email"
                 value={email}
-                onChangeText={(val) => setEmail(val)}
-                onFocus={() => setIsShowKeyboard(true)}
+                onChangeText={setEmail}
               />
               <View style={styles.passwordWrap}>
                 <TextInput
                   name="password"
                   value={password}
-                  secureTextEntry
+                  secureTextEntry={secureTextEntry}
                   style={styles.input}
                   placeholder="Password"
-                  onChangeText={(val) => setPassword(val)}
+                  onChangeText={setPassword}
                 />
-                <Pressable>
-                  <Text style={styles.showBtn}>Show</Text>
+                <Pressable onPress={toggleSecureTextEntry}>
+				<Text style={styles.showBtn}>{secureTextEntry? 'Show': 'Hide'}</Text>
                 </Pressable>
               </View>
-              <Pressable style={styles.buttonWrap}>
+              <Pressable style={styles.buttonWrap} onPress={onLogin}>
                 <Text style={styles.button}>Sign in</Text>
               </Pressable>
               <View style={styles.textWrap}>
@@ -73,7 +80,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   imgBg: {
-    flex: 1,
     width: "100%",
     height: "100%",
   },
@@ -83,6 +89,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 32,
+    paddingBottom: 70,
     backgroundColor: "#fff",
   },
   title: {
@@ -110,14 +117,16 @@ const styles = StyleSheet.create({
     marginBottom: 43,
   },
   showBtn: {
-    position: "absolute",
-    right: 16,
+     position: "absolute",
+    right: 0,
+    top: -16,
     transform: [{ translateY: -50 }],
     textAlign: "right",
     fontSize: 16,
     lineHeight: 19,
     fontFamily: "Roboto-Regular",
     color: "#1B4371",
+    padding:16,
   },
   buttonWrap: {
     width: "auto",

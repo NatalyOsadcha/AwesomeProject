@@ -1,19 +1,18 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { RegistrationScreen } from "./Screens/RegistrationScreen";
-import LoginScreen from "./Screens/LoginScreen";
+import LoginScreen from "./Screens/LoginScreen"
 import PostsScreen from "./Screens/PostsScreen";
-import LoginSC from "./Screens/LoginSC";
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
+import LoginSC from "./Screens/LoginScreen";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
 
-
 export default function App() {
- const [fontsLoaded] = useFonts({
-   'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
-   'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
-   'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
+  const [fontsLoaded] = useFonts({
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -28,14 +27,10 @@ export default function App() {
 
   return (
     <View>
-      <LoginSC/>
       {/* <RegistrationScreen /> */}
-      {/* <LoginScreen/> */}
+      <LoginScreen />
       {/* <PostsScreen/> */}
-      {/* <Text>Hello!</Text>  */}
       <StatusBar style="auto" />
     </View>
   );
 }
-
-
