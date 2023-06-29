@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import {
   View,
@@ -15,10 +15,9 @@ export default function PostsScreen() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <StatusBar style="auto" />
-        <View style={styles.headerContainer}>
+        {/* <View style={styles.headerContainer}>
           <Text style={styles.header}>Publications</Text>
-        </View>
+        </View> */}
         <View style={styles.body}>
           <View style={styles.user}>
             <View style={styles.avatarWrap}>
@@ -30,7 +29,7 @@ export default function PostsScreen() {
             </View>
           </View>
         </View>
-        <View style={styles.footer}>
+        {/* <View style={styles.footer}>
           <Pressable style={styles.storeWrap}>
             <AntDesign
               name="appstore-o"
@@ -55,7 +54,7 @@ export default function PostsScreen() {
               style={styles.icon}
             />
           </Pressable>
-        </View>
+        </View> */}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -63,27 +62,27 @@ export default function PostsScreen() {
 
 const styles = StyleSheet.create({
   container: {
+        flex: 1,
     position: "relative",
-    height: "100%",
-    paddingTop: 44,
+    // height: "100%",
   },
-  headerContainer: {
-    width: "100%",
-    height: 44,
-    borderBottomWidth: 1,
-    borderColor: "#E8E8E8",
-    borderStyle: "solid",
-  },
-  header: {
-    fontSize: 17,
-    fontFamily: "Roboto-Medium",
-    textAlign: "center",
-    lineHeight: 22,
-    letterSpacing: -0.41,
-    paddingTop: 11,
-    paddingBottom: 11,
-    color: "#212121",
-  },
+  // headerContainer: {
+  //   width: "100%",
+  //   height: 44,
+  //   borderBottomWidth: 1,
+  //   borderColor: "#E8E8E8",
+  //   borderStyle: "solid",
+  // },
+  // header: {
+  //   fontSize: 17,
+  //   fontFamily: "Roboto-Medium",
+  //   textAlign: "center",
+  //   lineHeight: 22,
+  //   letterSpacing: -0.41,
+  //   paddingTop: 11,
+  //   paddingBottom: 11,
+  //   color: "#212121",
+  // },
   body: {
     paddingTop: 32,
     paddingLeft: 16,
@@ -112,19 +111,19 @@ const styles = StyleSheet.create({
     lineHeight: 13,
     color: "rgba(33, 33, 33, 0.8)",
   },
-  footer: {
-    position: "absolute",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "baseline",
-    bottom: 0,
-    width: "100%",
-    height: 83,
-    borderTopWidth: 1,
-    borderColor: "#E8E8E8",
-    borderStyle: "solid",
-    paddingTop: 9,
-  },
+  // footer: {
+  //   position: "absolute",
+  //   flexDirection: "row",
+  //   justifyContent: "center",
+  //   alignItems: "baseline",
+  //   bottom: 0,
+  //   width: "100%",
+  //   height: 83,
+  //   borderTopWidth: 1,
+  //   borderColor: "#E8E8E8",
+  //   borderStyle: "solid",
+  //   paddingTop: 9,
+  // },
   addWrap: {
     marginLeft: 8,
     marginRight: 8,

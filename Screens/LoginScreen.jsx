@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -9,21 +10,24 @@ import {
   TextInput,
   Pressable,
   KeyboardAvoidingView,
-	Platform,
+  Platform,
 } from "react-native";
 
 export default function LoginScreen() {
+
   const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [password, setPassword] = useState("");
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
+	const navigation = useNavigation();
+	const { } = useRoute();
 
-	const toggleSecureTextEntry = () => {
-		setSecureTextEntry((prevState) => !prevState);
-	}
-
-  const onLogin = () => {
-    console.log("Credentials", `${email} + ${password}`);
+  const toggleSecureTextEntry = () => {
+    setSecureTextEntry((prevState) => !prevState);
   };
+
+//   const onLogin = () => {
+//     console.log("Credentials", `${email} + ${password}`);
+//   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -54,15 +58,19 @@ export default function LoginScreen() {
                   onChangeText={setPassword}
                 />
                 <Pressable onPress={toggleSecureTextEntry}>
-				<Text style={styles.showBtn}>{secureTextEntry? 'Show': 'Hide'}</Text>
+                  <Text style={styles.showBtn}>
+                    {secureTextEntry ? "Show" : "Hide"}
+                  </Text>
                 </Pressable>
               </View>
-              <Pressable style={styles.buttonWrap} onPress={onLogin}>
+              <Pressable style={styles.buttonWrap} onPress={() => navigation.navigate("Home", {})}>
                 <Text style={styles.button}>Sign in</Text>
               </Pressable>
               <View style={styles.textWrap}>
                 <Text style={styles.text}>Don't have an account?</Text>
-                <Pressable>
+                <Pressable
+                  onPress={() => navigation.navigate("Registration", {})}
+                >
                   <Text style={styles.link}>Sign up</Text>
                 </Pressable>
               </View>
@@ -117,7 +125,7 @@ const styles = StyleSheet.create({
     marginBottom: 43,
   },
   showBtn: {
-     position: "absolute",
+    position: "absolute",
     right: 0,
     top: -16,
     transform: [{ translateY: -50 }],
@@ -126,7 +134,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontFamily: "Roboto-Regular",
     color: "#1B4371",
-    padding:16,
+    padding: 16,
   },
   buttonWrap: {
     width: "auto",
