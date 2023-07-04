@@ -4,13 +4,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import LoginScreen from "./Screens/LoginScreen";
-import MapScreen from './Screens/MapScreen';
-import CommentsScreen from './Screens/CommentsScreen';
+import MapScreen from "./Screens/MapScreen";
+import CommentsScreen from "./Screens/CommentsScreen";
 import Home from "./Screens/Home";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
 // import getHeaderTitle from "./Components/getHeaderTitle";
+import { AntDesign } from "@expo/vector-icons";
 
 const MainStack = createStackNavigator();
 
@@ -33,7 +34,18 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Login">
+      <MainStack.Navigator
+        initialRouteName="Login"
+        screenOptions={{
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontSize: 17,
+            lineHeight: 22,
+            letterSpacing: -0.41,
+            fontFamily: "Roboto-Medium",
+          },
+        }}
+      >
         <MainStack.Screen
           name="Registration"
           component={RegistrationScreen}
@@ -55,10 +67,32 @@ export default function App() {
         <MainStack.Screen
           name="Map"
           component={MapScreen}
+          options={{
+            headerBackTitleVisible: false,
+            headerBackImage: () => (
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                color={"rgba(33, 33, 33, 0.8)"}
+                style={{ marginLeft: 13 }}
+              />
+            ),
+          }}
         />
         <MainStack.Screen
           name="Comments"
           component={CommentsScreen}
+          options={{
+            headerBackTitleVisible: false,
+            headerBackImage: () => (
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                color={"rgba(33, 33, 33, 0.8)"}
+                style={{ marginLeft: 13 }}
+              />
+            ),
+          }}
         />
       </MainStack.Navigator>
     </NavigationContainer>

@@ -24,50 +24,52 @@ export default function CreatePostsScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        // keyboardVerticalOffset={150}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <View style={styles.photoWrapper}>
-          <Image style={styles.photo} />
-          <Pressable style={styles.cameraWrapper}>
-            <FontAwesome name="camera" size={24} style={styles.camera} />
-          </Pressable>
-          <Text style={styles.photoText}>Upload photo/ Edit photo</Text>
-        </View>
-        <TextInput
-          placeholder="Name..."
-          style={styles.inputName}
-          name="name"
-          value={name}
-          onChangeText={setName}
-        ></TextInput>
-        <View style={styles.placeWrapper}>
+      <View style={styles.container}>
+        <KeyboardAvoidingView
+          behavior="position"
+          // behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View style={styles.photoWrapper}>
+            <Image style={styles.photo} />
+            <Pressable style={styles.cameraWrapper}>
+              <FontAwesome name="camera" size={24} style={styles.camera} />
+            </Pressable>
+            <Text style={styles.photoText}>Upload photo/ Edit photo</Text>
+          </View>
           <TextInput
-            name="place"
-            value={place}
-            onChangeText={setPlace}
-            placeholder="Place..."
-            style={styles.input}
-            paddingLeft={30}
+            placeholder="Name..."
+            style={styles.inputName}
+            name="name"
+            value={name}
+            onChangeText={setName}
           ></TextInput>
-          <Pressable
-            onPress={() => navigation.navigate("Map")}
-            style={styles.mapWrapper}
-          >
-            <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
-          </Pressable>
-        </View>
-        {name !== "" ? (
-          <ActiveSubmitButton text={"Publish"} onPress={() => {}} />
-        ) : (
-          <InactiveSubmitButton text={"Publish"} />
-        )}
+          <View style={styles.placeWrapper}>
+            <TextInput
+              name="place"
+              value={place}
+              onChangeText={setPlace}
+              placeholder="Place..."
+              style={styles.input}
+              paddingLeft={30}
+            ></TextInput>
+            <Pressable
+              onPress={() => navigation.navigate("Map")}
+              style={styles.mapWrapper}
+            >
+              <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
+            </Pressable>
+          </View>
+          {name !== "" ? (
+            <ActiveSubmitButton text={"Publish"} onPress={() => {}} />
+          ) : (
+            <InactiveSubmitButton text={"Publish"} />
+          )}
+        </KeyboardAvoidingView>
+        <View style={{ flex: 1 }}></View>
         <Pressable style={styles.trashWrapper}>
           <FontAwesome5 name="trash-alt" size={24} color="#BDBDBD" />
         </Pressable>
-      </KeyboardAvoidingView>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
@@ -132,24 +134,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Roboto-Medium",
   },
-  placeWrapper: {
-    position: "relative",
-  },
   mapWrapper: {
     position: "absolute",
     top: 10,
   },
   trashWrapper: {
-    direction: "flex",
-    position: "absolute",
-    bottom: 16,
-    left: "50%",
-    transform: [{ translateX: -18 }],
     justifyContent: "center",
     backgroundColor: "#F6F6F6",
     height: 40,
     width: 70,
     alignItems: "center",
     borderRadius: 20,
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginBottom: 32,
   },
 });

@@ -39,7 +39,9 @@ export default function PostsScreen() {
               <Text style={styles.photoComments}>0</Text>
             </View>
             <View style={styles.wrapper}>
-              <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
+              <Pressable onPress={() => navigation.navigate("Map")}>
+                <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
+              </Pressable>
               <Text style={styles.photoPlace}>Place</Text>
             </View>
           </View>
@@ -123,16 +125,4 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     textDecorationLine: "underline",
   },
-  // addWrap: {
-  //   marginLeft: 8,
-  //   marginRight: 8,
-  //   backgroundColor: "#FF6C00",
-  //   borderRadius: 20,
-  // },
-  // icon: {
-  //   paddingBottom: 8,
-  //   paddingTop: 8,
-  //   paddingLeft: 23,
-  //   paddingRight: 23,
-  // },
 });
