@@ -25,50 +25,48 @@ export default function CreatePostsScreen() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
-        style={{ flex: 1}}
+        style={styles.container}
         // keyboardVerticalOffset={150}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <View style={styles.container}>
-          <View style={styles.photoWrapper}>
-            <Image style={styles.photo} />
-            <Pressable style={styles.cameraWrapper}>
-              <FontAwesome name="camera" size={24} style={styles.camera} />
-            </Pressable>
-            <Text style={styles.photoText}>Upload photo/ Edit photo</Text>
-          </View>
+        <View style={styles.photoWrapper}>
+          <Image style={styles.photo} />
+          <Pressable style={styles.cameraWrapper}>
+            <FontAwesome name="camera" size={24} style={styles.camera} />
+          </Pressable>
+          <Text style={styles.photoText}>Upload photo/ Edit photo</Text>
+        </View>
+        <TextInput
+          placeholder="Name..."
+          style={styles.inputName}
+          name="name"
+          value={name}
+          onChangeText={setName}
+        ></TextInput>
+        <View style={styles.placeWrapper}>
           <TextInput
-            placeholder="Name..."
-            style={styles.inputName}
-            name="name"
-            value={name}
-            onChangeText={setName}
+            name="place"
+            value={place}
+            onChangeText={setPlace}
+            placeholder="Place..."
+            style={styles.input}
+            paddingLeft={30}
           ></TextInput>
-          <View style={styles.placeWrapper}>
-            <TextInput
-              name='place'
-              value={place}
-              onChangeText={setPlace}
-              placeholder="Place..."
-              style={styles.input}
-              paddingLeft={30}
-            ></TextInput>
-            <Pressable
-              onPress={() => navigation.navigate("Map")}
-              style={styles.mapWrapper}
-            >
-              <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
-            </Pressable>
-          </View>
-          {name !== "" ? (
-            <ActiveSubmitButton text={"Publish"} onPress={() => {}} />
-          ) : (
-            <InactiveSubmitButton text={"Publish"} />
-          )}
-          <Pressable style={styles.trashWrapper}>
-            <FontAwesome5 name="trash-alt" size={24} color="#BDBDBD" />
+          <Pressable
+            onPress={() => navigation.navigate("Map")}
+            style={styles.mapWrapper}
+          >
+            <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
           </Pressable>
         </View>
+        {name !== "" ? (
+          <ActiveSubmitButton text={"Publish"} onPress={() => {}} />
+        ) : (
+          <InactiveSubmitButton text={"Publish"} />
+        )}
+        <Pressable style={styles.trashWrapper}>
+          <FontAwesome5 name="trash-alt" size={24} color="#BDBDBD" />
+        </Pressable>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -126,13 +124,13 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
   inputName: {
-     borderBottomWidth: 1,
+    borderBottomWidth: 1,
     borderStyle: "solid",
     borderColor: "#E8E8E8",
     marginBottom: 16,
     height: 50,
     fontSize: 16,
-    fontFamily:"Roboto-Medium",
+    fontFamily: "Roboto-Medium",
   },
   placeWrapper: {
     position: "relative",
