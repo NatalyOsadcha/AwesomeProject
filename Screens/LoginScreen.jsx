@@ -12,22 +12,23 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import ActiveSubmitButton from "../Components/ActiveSubmitButton";
+import InactiveSubmitButton from "../Components/InactiveSubmitButton";
 
 export default function LoginScreen() {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-	const navigation = useNavigation();
-	const { } = useRoute();
+  const navigation = useNavigation();
+  const {} = useRoute();
 
   const toggleSecureTextEntry = () => {
     setSecureTextEntry((prevState) => !prevState);
   };
 
-//   const onLogin = () => {
-//     console.log("Credentials", `${email} + ${password}`);
-//   };
+  //   const onLogin = () => {
+  //     console.log("Credentials", `${email} + ${password}`);
+  //   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -63,14 +64,17 @@ export default function LoginScreen() {
                   </Text>
                 </Pressable>
               </View>
-              <Pressable style={styles.buttonWrap} onPress={() => navigation.navigate("Home", {})}>
-                <Text style={styles.button}>Sign in</Text>
-              </Pressable>
+              {email !== "" && password !== "" ? (
+                <ActiveSubmitButton
+                  text={"Sign in"}
+                  onPress={() => navigation.navigate("Home")}
+                />
+              ) : (
+                <InactiveSubmitButton text={"Sign in"} />
+              )}
               <View style={styles.textWrap}>
                 <Text style={styles.text}>Don't have an account?</Text>
-                <Pressable
-                  onPress={() => navigation.navigate("Registration", {})}
-                >
+                <Pressable onPress={() => navigation.navigate("Registration")}>
                   <Text style={styles.link}>Sign up</Text>
                 </Pressable>
               </View>
@@ -135,20 +139,6 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     color: "#1B4371",
     padding: 16,
-  },
-  buttonWrap: {
-    width: "auto",
-    alignItems: "center",
-    marginBottom: 16,
-    padding: 16,
-    backgroundColor: "#FF6C00",
-    borderRadius: 100,
-  },
-  button: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    lineHeight: 19,
-    fontFamily: "Roboto-Regular",
   },
   textWrap: {
     justifyContent: "center",

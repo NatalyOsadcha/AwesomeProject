@@ -4,11 +4,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import LoginScreen from "./Screens/LoginScreen";
+import MapScreen from './Screens/MapScreen';
+import CommentsScreen from './Screens/CommentsScreen';
 import Home from "./Screens/Home";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
-import getHeaderTitle from "./Components/getHeaderTitle";
+// import getHeaderTitle from "./Components/getHeaderTitle";
 
 const MainStack = createStackNavigator();
 
@@ -45,9 +47,18 @@ export default function App() {
         <MainStack.Screen
           name="Home"
           component={Home}
-          options={({ route }) => ({
-            headerTitle: getHeaderTitle(route),
-          })}
+          // options={({ route }) => ({
+          //   headerTitle: getHeaderTitle(route),
+          // })}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name="Map"
+          component={MapScreen}
+        />
+        <MainStack.Screen
+          name="Comments"
+          component={CommentsScreen}
         />
       </MainStack.Navigator>
     </NavigationContainer>

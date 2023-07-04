@@ -14,6 +14,8 @@ import {
   Platform,
   TouchableWithoutFeedback,
 } from "react-native";
+import ActiveSubmitButton from "../Components/ActiveSubmitButton";
+import InactiveSubmitButton from "../Components/InactiveSubmitButton";
 
 export default function RegistrationScreen() {
   const [login, setLogin] = useState("");
@@ -84,15 +86,17 @@ export default function RegistrationScreen() {
                   </Pressable>
                 </View>
                 <View style={styles.logIn}>
-                  <Pressable
-                    style={styles.buttonWrap}
-                    onPress={() => navigation.navigate("Home", {})}
-                  >
-                    <Text style={styles.button}>Sign up</Text>
-                  </Pressable>
+                  {login !== "" && email !== "" && password !== "" ? (
+                    <ActiveSubmitButton
+                      text={"Sign up"}
+                      onPress={() => navigation.navigate("Home")}
+                    />
+                  ) : (
+                    <InactiveSubmitButton text={"Sign up"} />
+                  )}
                   <View style={styles.textWrap}>
                     <Text style={styles.text}>Already have an account?</Text>
-                    <Pressable onPress={() => navigation.navigate("Login", {})}>
+                    <Pressable onPress={() => navigation.navigate("Login")}>
                       <Text style={styles.link}>Sign in</Text>
                     </Pressable>
                   </View>
@@ -179,20 +183,6 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     color: "#1B4371",
     padding: 16,
-  },
-  buttonWrap: {
-    width: "auto",
-    alignItems: "center",
-    marginBottom: 16,
-    padding: 16,
-    backgroundColor: "#FF6C00",
-    borderRadius: 100,
-  },
-  button: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    lineHeight: 19,
-    fontFamily: "Roboto-Regular",
   },
   textWrap: {
     justifyContent: "center",

@@ -1,6 +1,7 @@
 import React from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import {
   View,
   Text,
@@ -12,49 +13,37 @@ import {
 } from "react-native";
 
 export default function PostsScreen() {
+  const navigation = useNavigation();
+  const {} = useRoute();
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        {/* <View style={styles.headerContainer}>
-          <Text style={styles.header}>Publications</Text>
-        </View> */}
-        <View style={styles.body}>
-          <View style={styles.user}>
-            <View style={styles.avatarWrap}>
-              <Image></Image>
+        <View style={styles.user}>
+          <View style={styles.avatarWrap}>
+            <Image></Image>
+          </View>
+          <View>
+            <Text style={styles.name}>Natali Romanova</Text>
+            <Text style={styles.email}>email@example.com</Text>
+          </View>
+        </View>
+        <View style={styles.photoWrapper}>
+          <Image style={styles.photo} />
+          <Text style={styles.photoText}>Forest</Text>
+          <View style={styles.photoDescription}>
+            <View style={styles.wrapper}>
+              <Pressable onPress={() => navigation.navigate("Comments")}>
+                <FontAwesome5 name="comment" size={24} color="#BDBDBD" />
+              </Pressable>
+              <Text style={styles.photoComments}>0</Text>
             </View>
-            <View>
-              <Text style={styles.name}>Natali Romanova</Text>
-              <Text style={styles.email}>email@example.com</Text>
+            <View style={styles.wrapper}>
+              <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
+              <Text style={styles.photoPlace}>Place</Text>
             </View>
           </View>
         </View>
-        {/* <View style={styles.footer}>
-          <Pressable style={styles.storeWrap}>
-            <AntDesign
-              name="appstore-o"
-              size={24}
-              color="rgba(33, 33, 33, 0.8)"
-              style={styles.icon}
-            />
-          </Pressable>
-          <Pressable style={styles.addWrap}>
-            <AntDesign
-              name="plus"
-              size={24}
-              color="#FFFFFF"
-              style={styles.icon}
-            />
-          </Pressable>
-          <Pressable style={styles.userWrap}>
-            <SimpleLineIcons
-              name="user"
-              size={24}
-              color="rgba(33, 33, 33, 0.8)"
-              style={styles.icon}
-            />
-          </Pressable>
-        </View> */}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -62,28 +51,12 @@ export default function PostsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-        flex: 1,
+    flex: 1,
     position: "relative",
-    // height: "100%",
-  },
-  // headerContainer: {
-  //   width: "100%",
-  //   height: 44,
-  //   borderBottomWidth: 1,
-  //   borderColor: "#E8E8E8",
-  //   borderStyle: "solid",
-  // },
-  // header: {
-  //   fontSize: 17,
-  //   fontFamily: "Roboto-Medium",
-  //   textAlign: "center",
-  //   lineHeight: 22,
-  //   letterSpacing: -0.41,
-  //   paddingTop: 11,
-  //   paddingBottom: 11,
-  //   color: "#212121",
-  // },
-  body: {
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderColor: "#E8E8E8",
+    borderStyle: "solid",
     paddingTop: 32,
     paddingLeft: 16,
     paddingRight: 16,
@@ -111,29 +84,55 @@ const styles = StyleSheet.create({
     lineHeight: 13,
     color: "rgba(33, 33, 33, 0.8)",
   },
-  // footer: {
-  //   position: "absolute",
-  //   flexDirection: "row",
-  //   justifyContent: "center",
-  //   alignItems: "baseline",
-  //   bottom: 0,
-  //   width: "100%",
-  //   height: 83,
-  //   borderTopWidth: 1,
-  //   borderColor: "#E8E8E8",
-  //   borderStyle: "solid",
-  //   paddingTop: 9,
-  // },
-  addWrap: {
+  photoWrapper: {
+    marginTop: 32,
+    marginBottom: 32,
+  },
+  photo: {
+    width: "100%",
+    marginBottom: 8,
+    height: 240,
+    position: "relative",
+    backgroundColor: "#F6F6F6",
+    borderRadius: 8,
+  },
+  photoDescription: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  wrapper: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  photoText: {
+    marginBottom: 8,
+    fontSize: 16,
+    fontFamily: "Roboto-Medium",
+    color: "#212121",
+  },
+  photoComments: {
     marginLeft: 8,
-    marginRight: 8,
-    backgroundColor: "#FF6C00",
-    borderRadius: 20,
+    color: "#BDBDBD",
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
   },
-  icon: {
-    paddingBottom: 8,
-    paddingTop: 8,
-    paddingLeft: 23,
-    paddingRight: 23,
+  photoPlace: {
+    fontSize: 16,
+    marginLeft: 8,
+    fontFamily: "Roboto-Regular",
+    textDecorationLine: "underline",
   },
+  // addWrap: {
+  //   marginLeft: 8,
+  //   marginRight: 8,
+  //   backgroundColor: "#FF6C00",
+  //   borderRadius: 20,
+  // },
+  // icon: {
+  //   paddingBottom: 8,
+  //   paddingTop: 8,
+  //   paddingLeft: 23,
+  //   paddingRight: 23,
+  // },
 });
