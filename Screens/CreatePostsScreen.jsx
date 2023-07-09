@@ -1,17 +1,18 @@
-import React, { useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigation, useRoute, useIsFocused } from "@react-navigation/native";
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import {
   View,
   Text,
   StyleSheet,
-  Image,
   Pressable,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   TextInput,
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import ActiveSubmitButton from "../Components/ActiveSubmitButton";
 import InactiveSubmitButton from "../Components/InactiveSubmitButton";
@@ -20,29 +21,80 @@ export default function CreatePostsScreen() {
   const [name, setName] = useState("");
   const [place, setPlace] = useState("");
   const navigation = useNavigation();
-  const {} = useRoute();
+  const { } = useRoute();
+  const focused = useIsFocused();
+
+  const [hasPermission, setHasPermission] = useState(null);
+  const [cameraRef, setCameraRef] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior="position"
-          // behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <View style={styles.photoWrapper}>
-            <Image style={styles.photo} />
-            <Pressable style={styles.cameraWrapper}>
-              <FontAwesome name="camera" size={24} style={styles.camera} />
-            </Pressable>
-            <Text style={styles.photoText}>Upload photo/ Edit photo</Text>
-          </View>
+        <KeyboardAvoidingView behavior="position">
+          {hasPermission && focused && (
+            <Camera style={styles.camera} type={type} ref={setCameraRef}>
+              <View style={styles.photoView}>
+                <TouchableOpacity
+                  style={styles.flipContainer}
+                  onPress={() => {
+                    setType(
+                      type === Camera.Constants.Type.back
+                        ? Camera.Constants.Type.front
+                        : Camera.Constants.Type.back
+                    );
+                  }}
+                >
+                  <MaterialIcons
+                    name="flip-camera-android"
+                    size={35}
+                    color="#BDBDBD"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={async () => {
+                    if (cameraRef) {
+                      const { uri } = await cameraRef.takePictureAsync();
+                      await MediaLibrary.createAssetAsync(uri);
+                    }
+                  }}
+                >
+                  <View style={styles.cameraWrapper}>
+                    <FontAwesome
+                      name="camera"
+                      size={24}
+                      color={"#BDBDBD"}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Camera>
+          )}
+          <Text style={styles.photoText}>Upload photo/ Edit photo</Text>
           <TextInput
             placeholder="Name..."
             style={styles.inputName}
             name="name"
             value={name}
             onChangeText={setName}
-          ></TextInput>
+          />
           <View style={styles.placeWrapper}>
             <TextInput
               name="place"
@@ -51,7 +103,7 @@ export default function CreatePostsScreen() {
               placeholder="Place..."
               style={styles.input}
               paddingLeft={30}
-            ></TextInput>
+            />
             <Pressable
               onPress={() => navigation.navigate("Map")}
               style={styles.mapWrapper}
@@ -60,7 +112,7 @@ export default function CreatePostsScreen() {
             </Pressable>
           </View>
           {name !== "" ? (
-            <ActiveSubmitButton text={"Publish"} onPress={() => {}} />
+            <ActiveSubmitButton text={"Publish"} onPress={() => navigation.navigate("Posts")} />
           ) : (
             <InactiveSubmitButton text={"Publish"} />
           )}
@@ -74,6 +126,7 @@ export default function CreatePostsScreen() {
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -84,34 +137,31 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     padding: 16,
   },
-  photoWrapper: {
-    marginTop: 16,
-    marginBottom: 32,
-  },
-  photo: {
-    width: "100%",
-    marginBottom: 8,
-    height: 240,
-    position: "relative",
-    backgroundColor: "#E8E8E8",
-    borderRadius: 8,
-  },
   cameraWrapper: {
     position: "absolute",
     top: "50%",
     left: "50%",
-    transform: [{ translateX: -30 }, { translateY: -40 }],
+    transform: [{ translateX: -30 }, { translateY: -30 }],
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(255,255,255,0.4)",
     borderRadius: 50,
     width: 60,
     height: 60,
   },
-  camera: {
-    color: "#BDBDBD",
+  photoView: {
+    height: 320,
+    overflow: "hidden",
+    backgroundColor: "transparent",
+    justifyContent: "center",
+  },
+  flipContainer: {
+    position: "absolute",
+    bottom: 15,
+    right: 15,
   },
   photoText: {
+    marginBottom:16,
     fontSize: 16,
     fontFamily: "Roboto-Regular",
     color: "#BDBDBD",
