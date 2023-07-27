@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -11,24 +12,50 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import ActiveSubmitButton from "../Components/ActiveSubmitButton";
 import InactiveSubmitButton from "../Components/InactiveSubmitButton";
+import { logIn } from "../redux/auth/authOperationFirebase";
+import { selectIsLoggedIn } from "../redux/auth/authSelector";
 
 export default function LoginScreen() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  
   const navigation = useNavigation();
-  const {} = useRoute();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigation.navigate("Home");
+    }
+  }, [isLoggedIn]);
 
   const toggleSecureTextEntry = () => {
     setSecureTextEntry((prevState) => !prevState);
   };
 
-  //   const onLogin = () => {
-  //     console.log("Credentials", `${email} + ${password}`);
-  //   };
+  const onLogin = async () => {
+    if (!email.includes("@") || !email.includes(".") || email.length < 6) {
+      Alert.alert(`Email must follow the standard (e.g. "user@example.com").`);
+    } else if (password.length < 6) {
+      Alert.alert("Password must be at least 6 characters long");
+    } else {
+      try {
+        const user = await dispatch(logIn({ email, password }));
+        navigation.navigate("Home");
+        console.log("User logged in:", user);
+        setEmail("");
+        setPassword("");
+      } catch (error) {
+        Alert.alert("Invalid email or password");
+      }
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -65,10 +92,7 @@ export default function LoginScreen() {
                 </Pressable>
               </View>
               {email !== "" && password !== "" ? (
-                <ActiveSubmitButton
-                  text={"Sign in"}
-                  onPress={() => navigation.navigate("Home")}
-                />
+                <ActiveSubmitButton text={"Sign in"} onPress={onLogin} />
               ) : (
                 <InactiveSubmitButton text={"Sign in"} />
               )}

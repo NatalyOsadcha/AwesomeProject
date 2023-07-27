@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import {
   ImageBackground,
@@ -12,26 +13,54 @@ import {
   Pressable,
   Dimensions,
   Platform,
+  Alert,
   TouchableWithoutFeedback,
 } from "react-native";
 import ActiveSubmitButton from "../Components/ActiveSubmitButton";
 import InactiveSubmitButton from "../Components/InactiveSubmitButton";
+import { register } from "../redux/auth/authOperationFirebase";
 
 export default function RegistrationScreen() {
+  
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const navigation = useNavigation();
-  const {} = useRoute();
+  const dispatch = useDispatch();
 
   const toggleSecureTextEntry = () => {
     setSecureTextEntry((prevState) => !prevState);
   };
 
-  //  const onLogin = () => {
-  //   console.log("Credentials", `${login} +${email} + ${password}`);
-  // };
+  const onLogin = async () => {
+    if (login === "" || email === "" || password === "") {
+      Alert.alert("All fields are required!");
+    } else if (
+      !email.includes("@") ||
+      !email.includes(".") ||
+      email.length < 6
+    ) {
+      Alert.alert(`Email must follow the standard (e.g. "user@example.com").`);
+    } else if (password.length < 6) {
+      Alert.alert("Password must be at least 6 characters long");
+    } else {
+      try {
+        const user = await dispatch(register({ email, password, login }));
+        if (user) {
+          Alert.alert("You have registered successfully");
+          navigation.navigate("Home");
+          console.log("User registered:", user);
+        } else {
+          Alert.alert("Failed to create user. Please try again.");
+        }
+      } catch (error) {
+        console.log("Registration error:", error.message);
+        // Show an error message if there was an error during registration
+        Alert.alert("Failed to create user. Please try again.");
+      }
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -87,10 +116,7 @@ export default function RegistrationScreen() {
                 </View>
                 <View style={styles.logIn}>
                   {login !== "" && email !== "" && password !== "" ? (
-                    <ActiveSubmitButton
-                      text={"Sign up"}
-                      onPress={() => navigation.navigate("Home")}
-                    />
+                    <ActiveSubmitButton text={"Sign up"} onPress={onLogin} />
                   ) : (
                     <InactiveSubmitButton text={"Sign up"} />
                   )}

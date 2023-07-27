@@ -1,6 +1,6 @@
 import React from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useSelector } from "react-redux";
+import { useNavigation} from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
   View,
@@ -11,10 +11,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { userName, userEmail } from "../redux/auth/authSelector";
 
 export default function PostsScreen() {
+
   const navigation = useNavigation();
-  const {} = useRoute();
+  const login = useSelector(userName);
+  const email = useSelector(userEmail);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -24,13 +27,13 @@ export default function PostsScreen() {
             <Image></Image>
           </View>
           <View>
-            <Text style={styles.name}>Natali Romanova</Text>
-            <Text style={styles.email}>email@example.com</Text>
+            <Text style={styles.name}>{`${login}`}</Text>
+            <Text style={styles.email}>{email}</Text>
           </View>
         </View>
         <View style={styles.photoWrapper}>
           <Image style={styles.photo} />
-          <Text style={styles.photoText}>Forest</Text>
+          <Text style={styles.photoText}>{'Forest'}</Text>
           <View style={styles.photoDescription}>
             <View style={styles.wrapper}>
               <Pressable onPress={() => navigation.navigate("Comments")}>

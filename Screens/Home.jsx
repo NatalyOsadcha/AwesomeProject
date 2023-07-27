@@ -6,11 +6,14 @@ import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { logOut } from "../redux/auth/authOperationFirebase";
 
 const Tabs = createBottomTabNavigator();
 
 export default function Home() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   return (
     <Tabs.Navigator
@@ -69,7 +72,9 @@ export default function Home() {
           ),
           headerLeft: () => (
             <AntDesign name="arrowleft" size={24} color={"rgba(33, 33, 33, 0.8)"} style={{ marginLeft: 13 }}
-              onPress={() => navigation.navigate("Posts")}/>
+              onPress={() =>
+                // dispatch(logOut()),
+                navigation.navigate("Posts")} />
           )
         }}
       />
