@@ -11,17 +11,23 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(register.fulfilled, (state, { payload }) => {
-      state.user.email = payload.email;
-      state.user.login = payload.displayName;
-      state.uid = payload.uid;
-      state.isLoggedIn = true;
-    });
-    builder.addCase(logIn.fulfilled, (state, { payload }) => {
-      state.user.email = payload.email;
-      state.uid = payload.uid;
-      state.isLoggedIn = true;
-    });
+    builder
+      .addCase(register.fulfilled, (state, { payload }) => {
+        state.user.email = payload.email;
+        state.user.login = payload.displayName;
+        state.uid = payload.uid;
+        state.isLoggedIn = true;
+      })
+      .addCase(logIn.fulfilled, (state, { payload }) => {
+        state.user.email = payload.email;
+        state.uid = payload.uid;
+        state.isLoggedIn = true;
+      })
+      .addCase(logOut.fulfilled, (state) => {
+        state.user = { login: null, name: null, email: null };
+        state.uid = null;
+        state.isLoggedIn = false;
+      });
   },
 });
 

@@ -51,7 +51,10 @@ export default function Home() {
               size={24}
               color="#BDBDBD"
               style={{ marginRight: 13 }}
-              onPress={() => navigation.navigate("Login")}
+              onPress={() =>
+                dispatch(logOut()) &
+                navigation.navigate("Login")
+              }
             />
           ),
           tabBarIcon: ({ color, size }) => (
@@ -73,7 +76,6 @@ export default function Home() {
           headerLeft: () => (
             <AntDesign name="arrowleft" size={24} color={"rgba(33, 33, 33, 0.8)"} style={{ marginLeft: 13 }}
               onPress={() =>
-                // dispatch(logOut()),
                 navigation.navigate("Posts")} />
           )
         }}

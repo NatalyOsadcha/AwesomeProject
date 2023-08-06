@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import {
   useNavigation,
   useRoute,
@@ -6,6 +6,12 @@ import {
 } from "@react-navigation/native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
+import { reverseGeocodeAsync } from "expo-location";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
+import { storage, db } from "../firebase/ config";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import {
   View,
@@ -21,14 +27,17 @@ import {
 } from "react-native";
 import ActiveSubmitButton from "../Components/ActiveSubmitButton";
 import InactiveSubmitButton from "../Components/InactiveSubmitButton";
-
+import {userId} from "../redux/auth/authSelector"
 export default function CreatePostsScreen() {
-  const [name, setName] = useState("");
-  const [place, setPlace] = useState("");
+  const [name, setName] = useState(null);
+  const [place, setPlace] = useState(null);
   const [photoUri, setPhotoUri] = useState(null);
+  const [location, setLocation] = useState(null);
+  const owner = useSelector(userId);
   const navigation = useNavigation();
   const {} = useRoute();
   const focused = useIsFocused();
+  const dispatch = useDispatch();
 
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -55,7 +64,50 @@ export default function CreatePostsScreen() {
       const { uri } = await cameraRef.takePictureAsync();
       await MediaLibrary.createAssetAsync(uri);
       setPhotoUri(uri);
+
+      const location = await Location.getCurrentPositionAsync({});
+      const coords = await reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      if (coords && coords.length > 0) {
+        const { country, region } = coords[0];
+        setPlace(`${country}, ${region}`);
+      } else {
+        setPlace("Unknown");
+      }
+      setLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
     }
+  };
+
+  const writePostToFirestore = async () => {
+    try {
+    const timestamp = Date.now(); 
+    const docRef = await addDoc(collection(db, "users"), {
+      photoUri,
+      name,
+      place,
+      location,
+      timestamp, 
+      owner
+    });
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+    throw e;
+  }
+};
+
+  const onPublish = () => {
+    writePostToFirestore();
+    navigation.navigate("Posts");
+    setPhotoUri(null);
+    setName(null);
+    setPlace(null);
+    setLocation(null);
   };
 
   // const deletePhoto = async () => {
@@ -133,11 +185,8 @@ export default function CreatePostsScreen() {
               <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
             </Pressable>
           </View>
-          {name !== "" && place !== "" && photoUri !== "null" ? (
-            <ActiveSubmitButton
-              text={"Publish"}
-              onPress={() => navigation.navigate("Posts")}
-            />
+          {name !== null && place !== null && photoUri !== null ? (
+            <ActiveSubmitButton text={"Publish"} onPress={onPublish} />
           ) : (
             <InactiveSubmitButton text={"Publish"} />
           )}
@@ -146,7 +195,12 @@ export default function CreatePostsScreen() {
         {photoUri ? (
           <Pressable
             style={{ ...styles.trashWrapper, backgroundColor: "#FF6C00" }}
-            onPress={() => setPhotoUri(null)}
+            onPress={() =>
+              setPhotoUri(null) &&
+              setName(null) &&
+              setPlace(null) &&
+              setLocation(null)
+            }
           >
             <FontAwesome5 name="trash-alt" size={24} color="#fff" />
           </Pressable>
