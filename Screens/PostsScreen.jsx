@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { auth } from "../firebase/ config";
+import { auth } from "../firebase/config";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5} from "@expo/vector-icons";
 import {
   View,
   Text,
@@ -12,110 +12,118 @@ import {
   FlatList,
   TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
 } from "react-native";
 
 import { onAuthStateChanged, updateProfile } from "firebase/auth";
-import { db } from "../firebase/ config";
-
-
+import { db } from "../firebase/config";
+import avatar from "../assets/images/avatar-small.png";
 
 export default function PostsScreen() {
+
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      await updateProfile(user, {});
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await updateProfile(user, {});
 
-      setUser({
-        userId: user.uid,
-        login: user.displayName,
-        email: user.email,
-      });
+        setUser({
+          userId: user.uid,
+          login: user.displayName,
+          email: user.email,
+          photo: user.photoURL,
+        });
 
-      try {
-        const fetchedPosts = await getDataFromFirestore(user.uid);
-        setPosts(fetchedPosts);
-      } catch (error) {
-        console.error("Error fetching posts: ", error);
+        try {
+          const fetchedPosts = await getDataFromFirestore(user.uid);
+          setPosts(fetchedPosts);
+        } catch (error) {
+          console.error(error);
+        }
       }
-    }
-  });
+    });
 
-  return () => unsubscribe();
+    return () => unsubscribe();
   }, []);
-  
+
   useEffect(() => {
     const focusListener = navigation.addListener("focus", async () => {
-      try {
-        const fetchedPosts = await getDataFromFirestore(user?.userId);
-        setPosts(fetchedPosts);
-      } catch (error) {
-        console.error("Error fetching posts: ", error);
+      if (user && user.userId) {
+        try {
+          const fetchedPosts = await getDataFromFirestore(user.userId);
+          setPosts(fetchedPosts);
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
     return () => focusListener();
-  }, [navigation, user?.userId]);
-
-
+  }, [navigation, user]);
 
   const getDataFromFirestore = async (userId) => {
-  try {
-    const querySnapshot = await getDocs(
-      query(collection(db, "users"), where("owner", "==", userId))
-    );
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "posts"), where("owner", "==", userId))
+      );
 
-    const posts = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data(),
-    }));
+      const posts = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
 
-    posts.sort((a, b) => b.data.timestamp - a.data.timestamp);
-    return posts;
-  } catch (error) {
-    console.error("Error fetching posts: ", error);
-    throw error;
-  }
-};
+      posts.sort((a, b) => b.data.timestamp - a.data.timestamp);
+      return posts;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
 
-
-
- const renderPostItem = ({ item }) => {
-  if (!item.data) {
-    return null;
-  }
-  return (
-    <View style={styles.photoWrapper}>
-      <Image style={styles.photo} source={{ uri: item.data.photoUri }} />
-      <Text style={styles.photoText}>{item.data.name}</Text>
-      <View style={styles.photoDescription}>
-        <View style={styles.wrapper}>
-          <Pressable onPress={() => navigation.navigate("Comments")}>
-            <FontAwesome5 name="comment" size={24} color="#BDBDBD" />
-          </Pressable>
-          <Text style={styles.photoComments}>0</Text>
-        </View>
-        <View style={styles.wrapper}>
-          <Pressable onPress={() => navigation.navigate("Map")}>
-            <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
-          </Pressable>
-          <Text style={styles.photoPlace}>{item.data.place}</Text>
+  const renderPostItem = ({ item }) => {
+    if (!item.data) {
+      return null;
+    }
+    return (
+      <View style={styles.photoWrapper}>
+        <Image style={styles.photo} source={{ uri: item.data.photoUri }} />
+        <Text style={styles.photoText}>{item.data.name}</Text>
+        <View style={styles.photoDescription}>
+          <View style={styles.wrapper}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("Comments", {
+                  photo: item.data.photoUri,
+                  postId: item.id,
+                  comments: item.data.comments,
+                })}>
+               {item.data.comments.length > 0 ? (
+      <FontAwesome5 name="comment" size={24} color="#FF6C00" solid/>
+    ) : (
+      <FontAwesome5 name="comment" size={24} color="#BDBDBD" />
+    )}
+            </Pressable>
+            <Text style={styles.photoComments}>{item.data.comments.length}</Text>
+          </View>
+          <View style={styles.wrapper}>
+            <Pressable onPress={() => navigation.navigate("Map")}>
+              <FontAwesome5 name="map-marker-alt" size={24} color="#BDBDBD" />
+            </Pressable>
+            <Text style={styles.photoPlace}>{item.data.place}</Text>
+          </View>
         </View>
       </View>
-    </View>
-  );
-};
+    );
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.user}>
           <View style={styles.avatarWrap}>
-            <Image></Image>
+            <Image source={avatar} />
           </View>
           <View>
             <Text style={styles.name}>{user?.login}</Text>
@@ -147,6 +155,7 @@ const styles = StyleSheet.create({
   user: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom:32,
   },
   avatarWrap: {
     width: 60,
@@ -168,7 +177,6 @@ const styles = StyleSheet.create({
     color: "rgba(33, 33, 33, 0.8)",
   },
   photoWrapper: {
-    marginTop: 32,
     marginBottom: 32,
   },
   photo: {

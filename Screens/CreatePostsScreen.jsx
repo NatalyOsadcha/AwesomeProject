@@ -1,4 +1,5 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
+import * as ImagePicker from "expo-image-picker";
 import {
   useNavigation,
   useRoute,
@@ -8,9 +9,8 @@ import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import { reverseGeocodeAsync } from "expo-location";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
-import { storage, db } from "../firebase/ config";
+import { db } from "../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import {
@@ -27,12 +27,15 @@ import {
 } from "react-native";
 import ActiveSubmitButton from "../Components/ActiveSubmitButton";
 import InactiveSubmitButton from "../Components/InactiveSubmitButton";
-import {userId} from "../redux/auth/authSelector"
+import { userId } from "../redux/auth/authSelector";
+
 export default function CreatePostsScreen() {
   const [name, setName] = useState(null);
   const [place, setPlace] = useState(null);
   const [photoUri, setPhotoUri] = useState(null);
   const [location, setLocation] = useState(null);
+  const [locationCoords, setLocationCoords] = useState(null);
+
   const owner = useSelector(userId);
   const navigation = useNavigation();
   const {} = useRoute();
@@ -76,30 +79,28 @@ export default function CreatePostsScreen() {
       } else {
         setPlace("Unknown");
       }
-      setLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
+     setLocationCoords(coords);
     }
   };
 
   const writePostToFirestore = async () => {
     try {
-    const timestamp = Date.now(); 
-    const docRef = await addDoc(collection(db, "users"), {
-      photoUri,
-      name,
-      place,
-      location,
-      timestamp, 
-      owner
-    });
-    console.log("Document written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding document: ", e);
-    throw e;
-  }
-};
+      const timestamp = Date.now();
+      const newPost = {
+        photoUri,
+        name,
+        place,
+        location: locationCoords,
+        timestamp,
+        owner,
+        comments: [],
+        likes: 0,
+      };
+      const docRef = await addDoc(collection(db, "posts"), newPost);
+    } catch (e) {
+      throw e;
+    }
+  };
 
   const onPublish = () => {
     writePostToFirestore();
@@ -110,12 +111,21 @@ export default function CreatePostsScreen() {
     setLocation(null);
   };
 
-  // const deletePhoto = async () => {
-  //   if (photoUri) {
-  //     await MediaLibrary.deleteAssetsAsync([photoUri]);
-  //     setPhotoUri(null);
-  //   }
-  // };
+ const openImagePicker = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setPhotoUri(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -161,7 +171,9 @@ export default function CreatePostsScreen() {
               )}
             </View>
           )}
-          <Text style={styles.photoText}>Upload photo/ Edit photo</Text>
+          <Pressable onPress={openImagePicker}>
+            {photoUri ? (<Text style={styles.photoText}>Edit photo</Text>) : (<Text style={styles.photoText}>Upload photo</Text>)}
+          </Pressable>
           <TextInput
             placeholder="Name..."
             style={styles.inputName}

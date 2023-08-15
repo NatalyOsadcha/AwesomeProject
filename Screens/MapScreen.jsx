@@ -1,102 +1,91 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
-const MapScreen = ({route}) => {
-//   const [location, setLocation] = useState(null);
-//   const [selectedLocation, setSelectedLocation] = useState(null);
+const MapScreen = ({ route }) => {
+  const [location, setLocation] = useState(null);
 
-//   useEffect(() => {
-//     (async () => {
-//       let { status } = await Location.requestForegroundPermissionsAsync();
-//       if (status !== "granted") {
-//         console.log("Permission to access location was denied");
-//       }
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
 
-//       let location = await Location.getCurrentPositionAsync({});
-//       const coords = {
-//         latitude: location.coords.latitude,
-//         longitude: location.coords.longitude,
-//       };
-//       setLocation(coords);
-//     })();
-//   }, []);
+      let userLocation = await Location.getCurrentPositionAsync({});
+      const coords = {
+        latitude: userLocation.coords.latitude,
+        longitude: userLocation.coords.longitude,
+      };
+      setLocation(coords);
+    })();
+  }, []);
 
-//   return (
-//     <View style={styles.container}>
-//       <MapView
-//         style={styles.mapStyle}
-//         region={{
-//           ...location,
-//           latitudeDelta: 0.0922,
-//           longitudeDelta: 0.0421,
-//         }}
-//         showsUserLocation={true}
-//       >
-//         {location && (
-//           <Marker title="I am here" coordinate={location} description="Hello" />
-//         )}
-//       </MapView>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-//   mapStyle: {
-//     width: Dimensions.get("window").width,
-//     height: Dimensions.get("window").height,
-//   },
-// });
-  
-   if (route.params.location) {
-        const location = route.params.location;
-        return (
-          <View style={{flex: 1,}}>
-               {location && <MapView style={{flex: 1,}} showsUserLocation={true}         
-                 region={{
-               latitude: location.latitude,
-               longitude: location.longitude,
-               latitudeDelta: 0.0922,
-               longitudeDelta: 0.0421,
-             }}>
-                <Marker 
-             coordinate={{ latitude: location.latitude, longitude: location.longitude}}
-             title={route.params.locationName}/>
-             </MapView>}
-             </View>
-             )
-    }
-
+  if (route.params && route.params.location) {
+    const locationParam = route.params.location;
     return (
-       <View style={{flex: 1,}}>
+      <View style={styles.container}>
         <MapView
-        style={{flex: 1,}}
-        region={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        mapType="standard"
-        minZoomLevel={15}
-        onMapReady={() => console.log("Map is ready")}
-        onRegionChange={() => console.log("Region change")}
-      >
-        <Marker
-          title="I am here"
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-          description='Hello'
-        />
-      </MapView>
+          style={styles.mapStyle}
+          showsUserLocation={true}
+          initialRegion={{
+            latitude: locationParam.latitude,
+            longitude: locationParam.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <Marker
+            coordinate={{
+              latitude: locationParam.latitude,
+              longitude: locationParam.longitude,
+            }}
+            title={route.params.locationName}
+          />
+        </MapView>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      {location && (
+        <MapView
+          style={styles.mapStyle}
+          region={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          showsUserLocation={true}
+        >
+          <Marker
+            title="I am here"
+            coordinate={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+            }}
+            description="Hello"
+          />
+        </MapView>
+      )}
     </View>
-    )
-}
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  mapStyle: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  },
+});
 
 export default MapScreen;

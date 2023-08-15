@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import {
   ImageBackground,
   StyleSheet,
+  Image,
   Text,
   View,
   TextInput,
@@ -19,18 +21,35 @@ import {
 import ActiveSubmitButton from "../Components/ActiveSubmitButton";
 import InactiveSubmitButton from "../Components/InactiveSubmitButton";
 import { register } from "../redux/auth/authOperationFirebase";
+import { storage } from "../firebase/config";
 
 export default function RegistrationScreen() {
-  
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [photoURL, setPhotoURL] = useState(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const toggleSecureTextEntry = () => {
     setSecureTextEntry((prevState) => !prevState);
+  };
+
+  const openImagePicker = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setPhotoURL(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const onLogin = async () => {
@@ -62,6 +81,7 @@ export default function RegistrationScreen() {
     }
   };
 
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
@@ -76,12 +96,27 @@ export default function RegistrationScreen() {
             <View style={styles.formContainer}>
               <View style={{ marginBottom: 20 }}>
                 <View style={styles.avatar}>
-                  <View style={styles.addWrapper}>
-                    <AntDesign
-                      name="pluscircleo"
-                      size={25}
-                      style={styles.addIcon}
+                  {photoURL ? (
+                    <Image
+                      source={{ uri: photoURL }}
+                      style={styles.avatarImage}
                     />
+                  ) : (
+                    <></>
+                  )}
+                  <View style={styles.addWrapper}>
+                    <Pressable onPress={openImagePicker}>
+                      {photoURL ? ( <AntDesign
+                        name="pluscircleo"
+                        size={25}
+                        style={styles.addIconGrey}
+                      />):( <AntDesign
+                        name="pluscircleo"
+                        size={25}
+                        style={styles.addIcon}
+                      />)}
+                     
+                    </Pressable>
                   </View>
                 </View>
                 <Text style={styles.title}>Registration</Text>
@@ -178,9 +213,18 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#F6F6F6",
   },
+  avatarImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 16,
+    backgroundColor: "#F6F6F6",
+  },
   addIcon: {
     color: "#FF6C00",
   },
+  addIconGrey: { color: "#BDBDBD",
+    transform: [{ rotate: "45deg" }],},
+  
   input: {
     borderWidth: 1,
     borderStyle: "solid",

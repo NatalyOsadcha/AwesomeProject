@@ -10,8 +10,6 @@ import { enableLogging } from "firebase/database";
 
 enableLogging(true);
 
-// const { getDefaultConfig } = require('@expo/metro-config');
-
 const firebaseConfig = {
   apiKey: "AIzaSyAZfeGNyUMo3fUOn6uvT0XdMy7xp06BGUw",
   authDomain: "awesomeproject-19109.firebaseapp.com",
@@ -21,9 +19,6 @@ const firebaseConfig = {
   appId: "1:73662064364:web:555f92cd7922b5bbd2a7c9",
   measurementId: "G-YZL9N13M6J"
 };
-
-// export const defaultConfig = getDefaultConfig(__dirname);
-// defaultConfig.resolver.assetExts.push('cjs');
 
 const app = initializeApp(firebaseConfig);
 

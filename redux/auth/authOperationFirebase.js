@@ -6,7 +6,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { auth } from "../../firebase/ config";
+import { auth } from "../../firebase/config";
 
 export const register = createAsyncThunk(
   "auth/register",

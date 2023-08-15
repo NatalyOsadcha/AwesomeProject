@@ -68,7 +68,7 @@ export default function Home() {
       <Tabs.Screen
         name="Create posts"
         component={CreatePostsScreen}
-        options={{
+        options={{ 
           tabBarStyle: { display: "none" },
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="plus" size={size} color={color} />
@@ -83,7 +83,7 @@ export default function Home() {
       <Tabs.Screen
         name="My profile"
         component={ProfileScreen}
-        options={{
+        options={{  headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="user" size={size} color={color} />
           ),

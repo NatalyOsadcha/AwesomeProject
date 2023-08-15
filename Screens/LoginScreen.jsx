@@ -48,7 +48,6 @@ export default function LoginScreen() {
       try {
         const user = await dispatch(logIn({ email, password }));
         navigation.navigate("Home");
-        console.log("User logged in:", user);
         setEmail("");
         setPassword("");
       } catch (error) {
