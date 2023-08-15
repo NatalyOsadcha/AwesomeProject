@@ -21,7 +21,6 @@ import {
 import ActiveSubmitButton from "../Components/ActiveSubmitButton";
 import InactiveSubmitButton from "../Components/InactiveSubmitButton";
 import { register } from "../redux/auth/authOperationFirebase";
-import { storage } from "../firebase/config";
 
 export default function RegistrationScreen() {
   const [login, setLogin] = useState("");
@@ -69,13 +68,11 @@ export default function RegistrationScreen() {
         if (user) {
           Alert.alert("You have registered successfully");
           navigation.navigate("Home");
-          console.log("User registered:", user);
         } else {
           Alert.alert("Failed to create user. Please try again.");
         }
       } catch (error) {
-        console.log("Registration error:", error.message);
-        // Show an error message if there was an error during registration
+ 
         Alert.alert("Failed to create user. Please try again.");
       }
     }
